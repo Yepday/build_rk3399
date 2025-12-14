@@ -1,0 +1,151 @@
+# ================================
+# OrangePi RK3399 精简版 - 只保留构建脚本和项目架构
+# ================================
+
+# ================================
+# 完全排除的大型目录
+# ================================
+# 交叉编译工具链
+toolchain/
+
+# External 中的二进制文件
+external/packages/
+external/rkbin/
+external/firmware/
+external/Linux_Pack_Firmware/
+
+# ================================
+# Kernel - 只保留顶层文件，排除所有源码
+# ================================
+# 排除所有驱动源码
+kernel/drivers/
+
+# 排除所有架构相关源码
+kernel/arch/
+
+# 排除文档
+kernel/Documentation/
+
+# 排除头文件目录
+kernel/include/
+
+# 排除其他源码目录
+kernel/sound/
+kernel/fs/
+kernel/net/
+kernel/crypto/
+kernel/lib/
+kernel/mm/
+kernel/security/
+kernel/samples/
+kernel/virt/
+kernel/tools/
+kernel/firmware/
+kernel/scripts/
+
+# 排除内核源文件
+kernel/*.c
+kernel/*.h
+kernel/kernel/
+kernel/init/
+kernel/ipc/
+kernel/block/
+kernel/certs/
+kernel/usr/
+
+# 保留这些顶层文件：
+# Makefile, Kconfig, COPYING, README 等会被保留
+
+# ================================
+# U-Boot - 只保留顶层文件，排除所有源码
+# ================================
+# 排除所有源码目录
+uboot/arch/
+uboot/board/
+uboot/drivers/
+uboot/fs/
+uboot/net/
+uboot/common/
+uboot/lib/
+uboot/cmd/
+uboot/disk/
+uboot/env/
+uboot/post/
+uboot/test/
+uboot/tools/
+uboot/examples/
+uboot/doc/
+uboot/include/
+uboot/scripts/
+uboot/dts/
+
+# 排除配置目录（保留configs目录结构但排除内容）
+uboot/configs/*
+!uboot/configs/.gitkeep
+
+# 排除源文件
+uboot/*.c
+uboot/*.h
+
+# 保留这些顶层文件：
+# Makefile, Kconfig, README, Licenses/ 等会被保留
+
+# ================================
+# 编译产物和临时文件
+# ================================
+*.o
+*.ko
+*.obj
+*.elf
+*.so
+*.so.*
+*.a
+*.la
+*.lo
+*.lib
+*.dylib
+*.bin
+*.exe
+*.out
+*.app
+*.img
+*.dtb
+*.i*86
+*.x86_64
+*.hex
+*.map
+*.lst
+*.log
+*.tmp
+*.temp
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db
+
+# 编译配置文件
+.config
+.config.old
+*.symvers
+*.builtin
+*.order
+
+# ================================
+# 构建目录
+# ================================
+build/
+out/
+output/
+dist/
+*.build/
+
+# ================================
+# 编辑器和IDE
+# ================================
+.vscode/
+.idea/
+*.sublime-*
+.project
+.cproject
+.settings/

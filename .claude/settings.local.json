@@ -1,0 +1,15 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(du:*)",
+      "Bash(dir:*)",
+      "Bash(file:*)",
+      "Bash(git init:*)",
+      "Bash(git add:*)",
+      "Bash(git config:*)",
+      "Bash(git reset:*)",
+      "Bash(find:*)",
+      "Bash(xargs:*)"
+    ]
+  }
+}
