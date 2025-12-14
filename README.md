@@ -7,7 +7,7 @@
 这是 OrangePi RK3399 开发板的精简版项目，**只保留了项目架构和构建脚本**，方便学习和理解嵌入式 Linux 系统的构建流程。
 
 - **原始项目大小**: 2.9GB（包含完整源码）
-- **精简后大小**: 709KB（只保留架构和构建脚本）
+- **精简后大小**: 842KB（架构、构建脚本、打包工具）
 - **精简比例**: 99.97% 的体积减少
 
 ## 📁 项目结构
@@ -31,6 +31,11 @@ OrangePiRK3399/
 ├── uboot/                # U-Boot 引导加载器（只保留顶层配置）
 │   ├── Makefile         # U-Boot 构建入口
 │   ├── make.sh          # 构建脚本
+│   ├── tools/rockchip/  # ⭐ Rockchip 打包工具源码
+│   │   ├── boot_merger.c    # Boot 镜像合并
+│   │   ├── trust_merger.c   # Trust 镜像合并
+│   │   ├── loaderimage.c    # Loader 镜像生成
+│   │   └── resource_tool.c  # 资源文件打包
 │   ├── docs/            # 打包教程
 │   │   ├── loader镜像打包教程.md
 │   │   ├── trust镜像打包教程.md
@@ -59,7 +64,14 @@ OrangePiRK3399/
 - **Kernel**: Makefile, Kconfig, build.config
 - **U-Boot**: Makefile, Kconfig, make.sh
 
-### 3. 打包教程文档
+### 3. Rockchip 打包工具源码 ⭐
+- **boot_merger.c** (28KB) - 合并 boot 分区镜像
+- **trust_merger.c** - 合并 trust 分区镜像
+- **loaderimage.c** - 生成 loader 镜像
+- **resource_tool.c** (25KB) - 资源文件（logo等）打包
+- **SHA/CRC** 校验工具 - 完整性校验
+
+### 4. 打包教程文档
 - Loader 镜像打包教程
 - Trust 镜像打包教程
 - U-Boot 镜像打包教程
@@ -79,9 +91,10 @@ OrangePiRK3399/
    - 查看 `uboot/Makefile` 和 `uboot/make.sh`
    - 阅读 `uboot/docs/` 下的打包教程
 
-4. **学习镜像打包**
+4. **学习镜像打包** ⭐
    - 阅读 `uboot/固件打包原理深度解析.md`
    - 查看 `scripts/lib/pack.sh` 打包逻辑
+   - **研究 `uboot/tools/rockchip/` 源码** - 深入理解打包算法
 
 ## ⚙️ 完整源码获取
 
