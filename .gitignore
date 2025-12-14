@@ -73,6 +73,8 @@ uboot/env/
 uboot/post/
 uboot/test/
 uboot/tools/
+# 保留 Rockchip 打包工具源码（重要！）
+!uboot/tools/rockchip/
 uboot/examples/
 uboot/doc/
 uboot/include/
