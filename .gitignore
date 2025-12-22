@@ -10,7 +10,14 @@ toolchain/
 
 # External 中的二进制文件
 external/packages/
-external/rkbin/
+# external/rkbin/ 目录排除大部分文件，但保留 RK3399 配置
+external/rkbin/*
+!external/rkbin/RKBOOT/
+!external/rkbin/RKTRUST/
+external/rkbin/RKBOOT/*
+external/rkbin/RKTRUST/*
+!external/rkbin/RKBOOT/RK3399*.ini
+!external/rkbin/RKTRUST/RK3399*.ini
 external/firmware/
 external/Linux_Pack_Firmware/
 
