@@ -1,0 +1,77 @@
+# 示例：顶层Makefile（展示为什么不实用）
+# 注意：这个示例无法完全替代 build.sh
+
+# ========== 配置变量 ==========
+# 问题1：这些变量需要根据用户选择动态变化，Makefile做不到交互式选择
+BOARD ?= rk3399
+PLATFORM = OrangePiRK3399
+ARCH = arm64
+TOOLCHAIN = ./toolchain/gcc-linaro-6.3.1-2017.05-x86_64_aarch64-linux-gnu/bin/aarch64-linux-gnu-
+
+# 问题2：工具链路径是相对路径，需要根据当前工作目录调整
+RKBIN = ../external/rkbin
+RKTOOLS = $(RKBIN)/tools
+
+# ========== 顶层目标 ==========
+.PHONY: all uboot kernel rootfs image
+
+all: uboot kernel rootfs image
+
+# ========== U-Boot 构建 ==========
+uboot: uboot/.config
+	@echo "Building U-Boot..."
+	$(MAKE) -C uboot CROSS_COMPILE=$(TOOLCHAIN) all
+	@echo "Packing U-Boot images..."
+	# 问题3：这里需要调用复杂的Shell逻辑，Makefile语法不适合
+	cd uboot && \
+	RKCHIP=$$(grep -o 'CONFIG_ROCKCHIP_[RPK][XVK][0-9]*' .config | sed 's/.*_//') && \
+	LOAD_ADDR=$$(sed -n '/CONFIG_SYS_TEXT_BASE=/s/CONFIG_SYS_TEXT_BASE=//p' include/autoconf.mk) && \
+	$(RKTOOLS)/loaderimage --pack --uboot u-boot.bin uboot.img $${LOAD_ADDR}
+	# 问题4：还需要调用 boot_merger 和 trust_merger，涉及更复杂的逻辑
+
+uboot/.config:
+	$(MAKE) -C uboot $(BOARD)_defconfig
+
+# ========== 内核构建 ==========
+kernel: kernel/.config
+	@echo "Building Kernel..."
+	$(MAKE) -C kernel ARCH=$(ARCH) CROSS_COMPILE=$(TOOLCHAIN) -j$$(nproc) Image dtbs modules
+
+kernel/.config:
+	$(MAKE) -C kernel ARCH=$(ARCH) $(BOARD)_linux_defconfig
+
+# ========== Rootfs 构建 ==========
+rootfs:
+	@echo "Building Rootfs..."
+	# 问题5：rootfs构建涉及：
+	# - debootstrap（需要网络下载）
+	# - chroot 操作（需要root权限）
+	# - mount/umount 操作（需要root权限）
+	# 这些操作用Makefile表达非常困难
+
+# ========== 镜像打包 ==========
+image: uboot kernel rootfs
+	@echo "Packing final image..."
+	# 问题6：镜像打包涉及：
+	# - dd 写入分区表（需要精确计算偏移量）
+	# - parted 创建GPT分区（需要root权限）
+	# - loop设备挂载（需要root权限）
+	# Makefile无法优雅处理这些系统级操作
+
+# ========== 问题7：权限检查 ==========
+# Makefile无法检查是否是root用户，也无法自动sudo重新执行自己
+
+# ========== 问题8：错误处理 ==========
+# 如果某个步骤失败，Makefile会停止，但无法给出详细的错误提示
+# 例如：rkbin仓库不存在时，Shell可以打印友好的提示信息，Makefile只能报错退出
+
+# ========== 问题9：依赖检查 ==========
+check-deps:
+	@command -v debootstrap >/dev/null || (echo "Error: debootstrap not found"; exit 1)
+	@command -v qemu-aarch64-static >/dev/null || (echo "Error: qemu not found"; exit 1)
+	# 但即使检查了，Makefile也无法自动安装缺失的依赖
+
+clean:
+	$(MAKE) -C uboot clean
+	$(MAKE) -C kernel clean
+	rm -rf output/
