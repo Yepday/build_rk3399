@@ -9,7 +9,15 @@
       "Bash(git config:*)",
       "Bash(git reset:*)",
       "Bash(find:*)",
-      "Bash(xargs:*)"
+      "Bash(xargs:*)",
+      "Bash(tree:*)",
+      "Bash(git remote add:*)",
+      "Bash(git branch:*)",
+      "Bash(git push:*)",
+      "Bash(git pull:*)",
+      "Bash(git status:*)",
+      "Bash(ls:*)",
+      "Bash(git commit -m \"$\\(cat <<''EOF''\n添加 RK3399 配置文件和更新 .gitignore\n\n- 添加 RK3399 RKBOOT 配置文件（3个）：\n  - RK3399MINIALL.ini - 标准 Loader 配置\n  - RK3399MINIALL_SPINOR.ini - SPI NOR Flash Loader 配置\n  - RK3399PROMINIALL.ini - RK3399Pro Loader 配置\n\n- 添加 RK3399 RKTRUST 配置文件（2个）：\n  - RK3399TRUST.ini - 标准 Trust 配置\n  - RK3399PROTRUST.ini - RK3399Pro Trust 配置\n\n- 更新 .gitignore 规则：\n  - 排除 external/rkbin/ 目录的大部分内容\n  - 但保留 RK3399 相关的 ini 配置文件\n\n这些配置文件用于 make.sh 脚本打包固件时使用：\n- boot_merger 工具使用 RKBOOT ini 文件打包 Loader 镜像\n- trust_merger 工具使用 RKTRUST ini 文件打包 Trust 镜像\n- loaderimage 工具使用这些配置生成 U-Boot 镜像\n\n注：所有打包工具源码（boot_merger.c, trust_merger.c, loaderimage.c 等）\n已在之前的提交中包含在 uboot/tools/rockchip/ 目录中。\n\n🤖 Generated with [Claude Code]\\(https://claude.com/claude-code\\)\n\nCo-Authored-By: Claude Sonnet 4.5 <noreply@anthropic.com>\nEOF\n\\)\")"
     ]
   }
 }
